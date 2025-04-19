@@ -185,3 +185,85 @@ Send a JSON object with the following structure:
 - `401 Unauthorized` – Invalid email or password.
 
 ---
+
+## Endpoint
+
+**GET** `/users/profile`
+
+Returns the authenticated user's profile information.
+
+---
+
+## Description
+
+- Requires authentication via JWT token (sent as a cookie or in the `Authorization` header as `Bearer <token>`).
+- Returns the user's profile data.
+
+---
+
+## Responses
+
+### Success
+
+- **Status Code:** `201 Created`
+- **Body:**
+  ```json
+  {
+    "_id": "user_id",
+    "fullName": {
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    "email": "john.doe@example.com"
+    // other user fields if present
+  }
+  ```
+
+### Unauthorized
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+---
+
+## Endpoint
+
+**GET** `/users/logOut`
+
+Logs out the authenticated user.
+
+---
+
+## Description
+
+- Requires authentication via JWT token (sent as a cookie or in the `Authorization` header as `Bearer <token>`).
+- Blacklists the current JWT token and clears the authentication cookie.
+
+---
+
+## Responses
+
+### Success
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "massage": "Logged Out"
+  }
+  ```
+
+### Unauthorized
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
