@@ -62,7 +62,7 @@ Send a JSON object with the following structure:
         "lastName": "Doe"
       },
       "email": "john.doe@example.com",
-      "password": "hashed_password"
+      "password": "securepassword"
     }
   }
   ```
@@ -89,5 +89,99 @@ Send a JSON object with the following structure:
 
 - `201 Created` – User registered successfully.
 - `400 Bad Request` – Validation failed (see errors array for details).
+
+---
+
+## Endpoint
+
+**POST** `/users/login`
+
+Authenticates a user and returns a JWT token.
+
+---
+
+## Request Body
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "email": "string, required, valid email",
+  "password": "string, required, min 6 characters"
+}
+```
+
+### Example
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securepassword"
+}
+```
+
+---
+
+## Description
+
+- **Authenticates a user** using the provided email and password.
+- Returns a JWT token and the user object (excluding the password) if authentication is successful.
+
+---
+
+## Responses
+
+### Success
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "token": "jwt_token_string",
+    "user": {
+      "_id": "user_id",
+      "fullName": {
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "email": "john.doe@example.com",
+      "password": "securepassword"
+    }
+  }
+  ```
+
+### Validation Error
+
+- **Status Code:** `400 Bad Request`
+- **Body:**
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Error message",
+        "param": "field_name",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+### Authentication Error
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "massage": "invalid email or password"
+  }
+  ```
+
+---
+
+## Status Codes
+
+- `200 OK` – User authenticated successfully.
+- `400 Bad Request` – Validation failed (see errors array for details).
+- `401 Unauthorized` – Invalid email or password.
 
 ---
