@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const bcryptjs = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 
 const userSchema = new mongoose.Schema({
@@ -12,9 +12,9 @@ const userSchema = new mongoose.Schema({
         },
         lastName: {
             type: String,
-            required: true,
             minLength: [3 , "Last Name must be contain at list 3 Characters"]
-        },
+        }
+    },
         email: {
             type: String,
             required: true,
@@ -24,18 +24,19 @@ const userSchema = new mongoose.Schema({
         password: {
             type: String,
             required: true,
-            select: false
+            select: false,
+            minLength: [6 , "password must be contain at list 6 Characters"]
         },
         socketId: {
             type:String,  
         }
-    }
+    
 })
 
-userSchema.methods.generateAuthToken = function() {
-    const token = jwt.sign({_id : this._id} , process.env.JWT_SECRET);
-    return token
-}
+userSchema.methods.generateAuthToken = async function () {
+    const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET); 
+    return token;
+  };
 
 userSchema.method.comparePassword = async function (password) {
     return await bcryptjs.compare(password , this.password);
