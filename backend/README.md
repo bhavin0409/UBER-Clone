@@ -267,3 +267,149 @@ Logs out the authenticated user.
     "message": "Unauthorized"
   }
   ```
+
+---
+
+# Captain API Documentation
+
+## Endpoint
+
+### POST `/captains/register`
+
+Registers a new captain in the system.
+
+---
+
+## Request Body
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "fullName": {
+    "firstName": "string, required, min 3 characters",
+    "lastName": "string, optional, min 3 characters"
+  },
+  "email": "string, required, valid email, min 5 characters",
+  "password": "string, required, min 6 characters",
+  "vehicle": {
+    "color": "string, required, min 3 characters",
+    "plate": "string, required, min 3 characters",
+    "capacity": "number, required, min 1",
+    "vehicleType": "string, required, one of ['car', 'motorcycle', 'auto']"
+  }
+}
+```
+
+### Example
+
+```json
+{
+  "fullName": {
+    "firstName": "John",
+    "lastName": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "securepassword",
+  "vehicle": {
+    "color": "Red",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+---
+
+## Description
+
+- **Registers a new captain** with the provided full name, email, password, and vehicle details.
+- The password is securely hashed before storage.
+- Returns a JWT token and the created captain object (excluding the password).
+
+---
+
+## Responses
+
+### Success
+
+- **Status Code:** `201 Created`
+- **Body:**
+  ```json
+  {
+    "token": "jwt_token_string",
+    "captain": {
+      "_id": "captain_id",
+      "fullName": {
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "email": "john.doe@example.com",
+      "vehicle": {
+        "color": "Red",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+      },
+      "status": "inactive",
+      "location": {
+        "lat": null,
+        "lng": null
+      }
+    }
+  }
+  ```
+
+### Validation Error
+
+- **Status Code:** `400 Bad Request`
+- **Body:**
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Error message",
+        "param": "field_name",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+### Conflict
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "captain is already exist"
+  }
+  ```
+
+---
+
+## Status Codes
+
+- `201 Created` – Captain registered successfully.
+- `400 Bad Request` – Validation failed (see errors array for details).
+- `401 Unauthorized` – Captain already exists.
+
+---
+
+## Validation Rules
+
+- **`fullName.firstName`**: Must be at least 3 characters long.
+- **`email`**: Must be a valid email address.
+- **`password`**: Must be at least 6 characters long.
+- **`vehicle.color`**: Must be at least 3 characters long.
+- **`vehicle.plate`**: Must be at least 3 characters long.
+- **`vehicle.capacity`**: Must be a number greater than or equal to 1.
+- **`vehicle.vehicleType`**: Must be one of the following: `car`, `motorcycle`, `auto`.
+
+---
+
+## Notes
+
+- The `status` field is set to `inactive` by default.
+- The `location` field is optional and defaults to `null` for both `lat` and `lng`.
