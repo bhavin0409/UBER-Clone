@@ -397,6 +397,199 @@ Send a JSON object with the following structure:
 
 ---
 
+## Endpoint
+
+### POST `/captains/login`
+
+Authenticates a captain and returns a JWT token.
+
+---
+
+## Request Body
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "email": "string, required, valid email",
+  "password": "string, required, min 6 characters"
+}
+```
+
+### Example
+
+```json
+{
+  "email": "captain@example.com",
+  "password": "securepassword"
+}
+```
+
+---
+
+## Description
+
+- **Authenticates a captain** using the provided email and password.
+- Returns a JWT token and the captain object (excluding the password) if authentication is successful.
+
+---
+
+## Responses
+
+### Success
+
+- **Status Code:** `201 Created`
+- **Body:**
+  ```json
+  {
+    "token": "jwt_token_string",
+    "captain": {
+      "_id": "captain_id",
+      "fullName": {
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "email": "captain@example.com",
+      "vehicle": {
+        "color": "Red",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+      },
+      "status": "inactive",
+      "location": {
+        "lat": null,
+        "lng": null
+      }
+    }
+  }
+  ```
+
+### Validation Error
+
+- **Status Code:** `400 Bad Request`
+- **Body:**
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Error message",
+        "param": "field_name",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+### Authentication Error
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Invalid Email or Password"
+  }
+  ```
+
+---
+
+## Endpoint
+
+### GET `/captains/profile`
+
+Returns the authenticated captain's profile information.
+
+---
+
+## Description
+
+- Requires authentication via JWT token (sent as a cookie or in the `Authorization` header as `Bearer <token>`).
+- Returns the captain's profile data.
+
+---
+
+## Responses
+
+### Success
+
+- **Status Code:** `201 Created`
+- **Body:**
+  ```json
+  {
+    "captain": {
+      "_id": "captain_id",
+      "fullName": {
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "email": "captain@example.com",
+      "vehicle": {
+        "color": "Red",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+      },
+      "status": "inactive",
+      "location": {
+        "lat": null,
+        "lng": null
+      }
+    }
+  }
+  ```
+
+### Unauthorized
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+---
+
+## Endpoint
+
+### GET `/captains/logout`
+
+Logs out the authenticated captain.
+
+---
+
+## Description
+
+- Requires authentication via JWT token (sent as a cookie or in the `Authorization` header as `Bearer <token>`).
+- Blacklists the current JWT token and clears the authentication cookie.
+
+---
+
+## Responses
+
+### Success
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "message": "Logout Successfully"
+  }
+  ```
+
+### Unauthorized
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+
+---
+
 ## Validation Rules
 
 - **`fullName.firstName`**: Must be at least 3 characters long.

@@ -76,20 +76,20 @@ captainSchema.methods.generateAuthToken = async function () {
     return token;
 };
 
-captainSchema.methods.generateAuthToken = async() => {
+captainSchema.methods.generateAuthToken = function(){
     const token = jwt.sign(
-        { _id: this._id },
+        { _id: this._id }, 
         process.env.JWT_SECRET,
         { expiresIn: '24h' }
     );
     return token;
 }
 
-captainSchema.methods.caparePassword = async(password) => {
+captainSchema.methods.comparePassword = async function(password) {
     return await bcryptjs.compare(password , this.password)
 }
 
-captainSchema.statics.hashPassword = async(password) => {
+captainSchema.statics.hashPassword = async function(password) {
     return await bcryptjs.hash(password , 10)
 }
 
