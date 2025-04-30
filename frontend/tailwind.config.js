@@ -11,7 +11,6 @@ export default {
   plugins: [],
 }
 
-console.log(require('path').resolve('./src/**/*.{js,ts,jsx,tsx,vue}'));
 
 
 
